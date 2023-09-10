@@ -171,5 +171,51 @@
 
 			return incluyeHijoIzq || incluyeHijoDer;
 		}
+
+		// Metodo donde se ingresa un arbol y la longitud como parametros. Devuelve en el caso que exista un camino posible, en el caso que no devuelve una lista vacia
+		public List<T> resolver(ArbolBinario<T> arbol, int longitud)
+		{
+			List<T> camino = new List<T>();
+			bool checkCamino = false;
+
+			void buscarCamino(ArbolBinario<T> nodo, int longitudRestante)
+			{
+				if (nodo.getDatoRaiz() == null)
+				{
+					return;
+				}
+
+				if (checkCamino == false)
+				{
+					camino.Add(nodo.getDatoRaiz());
+				}
+
+				if (nodo.esHoja() && longitudRestante == 1)
+				{
+					checkCamino = true;
+					return;
+				}
+
+				if (nodo.getHijoIzquierdo() != null)
+				{
+					buscarCamino(nodo.getHijoIzquierdo(), longitudRestante - 1);
+				}
+				if (nodo.getHijoDerecho() != null)
+				{
+					buscarCamino(nodo.getHijoDerecho(), longitudRestante - 1);
+				}
+
+				if (checkCamino == false && (camino.Count != longitud || (camino.Count == longitud && !nodo.esHoja())))
+				{
+					camino.RemoveAt(camino.Count - 1);
+
+				}
+
+			}
+
+			buscarCamino(arbol, longitud);
+
+			return camino;
+		}
 	}
 }
